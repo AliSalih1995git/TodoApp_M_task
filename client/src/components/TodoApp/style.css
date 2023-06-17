@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80vh;
+  width: 80vw;
+  border: 1px solid #557b20;
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 20px;
+  color: white;
+}
+/* .allTodos {
+  width: 100%;
+  list-style: none;
+}
+.singleTodo {
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: rgb(27, 174, 20);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+.todoText {
+  flex: 1;
+} */
+.buttonWraper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end; /* Align items to the right side */
+}
+
+.search {
+  width: 100%;
+  height: 50px;
+  border: none;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px; /* Add margin to separate it from the button */
+}
+
+.addButton {
+  width: 200px;
+}
