@@ -3,7 +3,7 @@
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
-  width: 30.3%;
+  width: 250px;
   max-height: 200px;
   margin-top: 20px;
   display: flex;
@@ -21,4 +21,12 @@
   font-size: 14px;
   color: black;
   overflow-y: auto;
+}
+.card-icons {
+  color: black;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  cursor: pointer;
 }

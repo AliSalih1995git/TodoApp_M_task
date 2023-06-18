@@ -10,7 +10,7 @@ exports.getAllTodos = async (req, res) => {
 
     for (const redisKey of redisKeys) {
       const redisValue = await redisClient.get(redisKey);
-      console.log(redisValue, "redisValue");
+      // console.log(redisValue, "redisValue");
       redisValues.push(redisValue);
     }
 
@@ -33,6 +33,34 @@ exports.getAllTodos = async (req, res) => {
   }
 };
 
+exports.getSingleTodo = async (req, res) => {
+  console.log("Enter single");
+  const id = req.params.id;
+  console.log(id);
+  try {
+    const redisKey = `todo:${id}`;
+    const redisValue = await redisClient.get(redisKey);
+
+    if (redisValue) {
+      const todo = JSON.parse(redisValue);
+      res.status(200).json(todo);
+    } else {
+      const todo = await TodoModel.findById(id);
+
+      if (todo) {
+        const redisValue = JSON.stringify(todo);
+        await redisClient.set(redisKey, redisValue);
+        res.status(200).json(todo);
+      } else {
+        res.status(404).json({ message: "Todo not found" });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 //create todos
 exports.createTodos = async (req, res) => {
   const { text, description } = req.body;
@@ -43,7 +71,7 @@ exports.createTodos = async (req, res) => {
       const redisKey = `todo:${todo._id}`;
       const redisValue = JSON.stringify(todo);
       const res = await redisClient.set(redisKey, redisValue);
-      console.log(res, "updatedTodos");
+      // console.log(res, "updatedTodos");
     } catch (error) {
       console.error(error);
     }
@@ -104,6 +132,7 @@ exports.updateTodos = async (req, res) => {
 
 //delete todo
 exports.deleteTodos = async (req, res) => {
+  console.log("DELETE");
   const { _id } = req.body;
   try {
     const todo = await TodoModel.findByIdAndDelete(_id);

@@ -1,18 +1,25 @@
 import React from "react";
 import "./style.css";
+// import axios from "axios";
+// import { toast } from "react-toastify";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
-function SingleTodo({ title, description }) {
+function SingleTodo({ title, description, id, handleDelete }) {
+  // const navigate = useNavigate();
+  // const BackendURL =
+  //   process.env.REACT_APP_BACKEND_URL || "http://localhost:5051";
+
   return (
     <div className="card">
-      <h2 className="card-title">aaaaaaaaaaaaa</h2>
-      <p className="card-description">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five
-        centuries, but also the leap into electronic typesetting, remaining
-        essentially unchanged.
-      </p>
+      <h2 className="card-title">{title}</h2>
+      <p className="card-description">{description}</p>
+      <div className="card-icons">
+        <Link to={`/addTodo/${id}`}>
+          <AiFillEdit size={28} />
+        </Link>
+        <AiFillDelete size={28} onClick={() => handleDelete(id)} />
+      </div>
     </div>
   );
 }
