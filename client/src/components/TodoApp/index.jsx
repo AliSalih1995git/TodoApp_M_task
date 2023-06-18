@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
+import SingleTodo from "../SingleTodo";
 
 function TodoApp() {
   return (
@@ -14,6 +15,10 @@ function TodoApp() {
             </button>
           </Link>
           <input className="search" type="text" placeholder="Search Todos..." />
+        </div>
+        <div className="card-container">
+          <SingleTodo />
+          <SingleTodo />
         </div>
       </div>
     </div>
