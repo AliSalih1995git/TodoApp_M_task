@@ -10,7 +10,6 @@ function AddTodo() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  console.log(id, "ID");
   const [todo, setTodo] = useState({ text: "", description: "" });
 
   const fetchSingleTodo = async () => {

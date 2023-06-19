@@ -35,7 +35,6 @@ exports.getAllTodos = async (req, res) => {
 };
 
 exports.getSingleTodo = async (req, res) => {
-  console.log("Enter single");
   const id = req.params.id;
   console.log(id);
   try {
@@ -171,7 +170,6 @@ exports.updateTodos = async (req, res) => {
 
 //delete todo
 exports.deleteTodos = async (req, res) => {
-  console.log("DELETE");
   const { _id } = req.body;
   try {
     const todo = await TodoModel.findByIdAndDelete(_id);
