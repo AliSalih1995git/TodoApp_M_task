@@ -1,6 +1,7 @@
 const TodoModel = require("../models/Todo");
 const { client: redisClient } = require("../config/config");
-
+const { Client } = require("@elastic/elasticsearch");
+const client = new Client({ node: "http://localhost:9200" });
 //get all todos
 
 exports.getAllTodos = async (req, res) => {
@@ -61,6 +62,32 @@ exports.getSingleTodo = async (req, res) => {
   }
 };
 
+//search Todos
+exports.searchTodos = async (req, res) => {
+  console.log("Enter Search route");
+  const { search } = req.query;
+  console.log(search);
+  try {
+    const { body } = await client.search({
+      index: "todos",
+      body: {
+        query: {
+          multi_match: {
+            query: search,
+            fields: ["text", "description"],
+          },
+        },
+      },
+    });
+
+    const results = body.hits.hits.map((hit) => hit._source);
+    res.json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 //create todos
 exports.createTodos = async (req, res) => {
   const { text, description } = req.body;
@@ -72,6 +99,10 @@ exports.createTodos = async (req, res) => {
       const redisValue = JSON.stringify(todo);
       const res = await redisClient.set(redisKey, redisValue);
       // console.log(res, "updatedTodos");
+      const elasticSearchResponse = await client.index({
+        index: "todos",
+        body: todo,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -117,6 +148,14 @@ exports.updateTodos = async (req, res) => {
           const redisValue = JSON.stringify(updatedTodo);
           await redisClient.set(redisKey, redisValue);
         }
+
+        await client.update({
+          index: "todos",
+          id: _id,
+          body: {
+            doc: { text, description },
+          },
+        });
       } catch (error) {
         console.error(error);
       }
@@ -150,6 +189,11 @@ exports.deleteTodos = async (req, res) => {
             break;
           }
         }
+
+        await client.delete({
+          index: "todos",
+          id: _id,
+        });
       } catch (error) {
         console.error(error);
       }

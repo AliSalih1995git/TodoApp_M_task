@@ -15,7 +15,7 @@ function AddTodo() {
 
   const fetchSingleTodo = async () => {
     try {
-      const response = await axios.get(`${BackendURL}/api/${id}`);
+      const response = await axios.get(`${BackendURL}/api/getSingleTodo/${id}`);
       const { text, description } = response.data;
       setTodo({ text, description });
     } catch (error) {

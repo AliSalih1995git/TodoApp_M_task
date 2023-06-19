@@ -10,6 +10,7 @@ function TodoApp() {
     process.env.REACT_APP_BACKEND_URL || "http://localhost:5051";
 
   const [todos, setTodos] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchAllTodos = async () => {
     try {
@@ -21,8 +22,22 @@ function TodoApp() {
   };
 
   useEffect(() => {
-    fetchAllTodos();
+    if (searchQuery === "") fetchAllTodos();
   }, []);
+
+  const fetchSearchTodos = async () => {
+    try {
+      const response = await axios.get(
+        `${BackendURL}/api/search?search=${searchQuery}`
+      );
+      setTodos(response.data);
+    } catch (error) {
+      console.log("Error fetching todos:", error);
+    }
+  };
+  useEffect(() => {
+    if (searchQuery !== "") fetchSearchTodos();
+  }, [searchQuery]);
 
   const handleDelete = async (id) => {
     console.log(id, "Delete id");
@@ -38,7 +53,7 @@ function TodoApp() {
       console.log("Error deleting todo:", error);
     }
   };
-  console.log(todos, "todos");
+  // console.log(todos, "todos");
   return (
     <div className="App">
       <div className="container">
@@ -49,7 +64,13 @@ function TodoApp() {
               Add Todo
             </button>
           </Link>
-          <input className="search" type="text" placeholder="Search Todos..." />
+          <input
+            className="search"
+            type="text"
+            placeholder="Search Todos..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <div className="card-container">
           {todos.length > 0 ? (
